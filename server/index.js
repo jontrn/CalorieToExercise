@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://your-app-name.vercel.app"],
+    origin: ["http://localhost:5173", "https://calorietoexercise.vercel.app"],
   }),
 );
 
