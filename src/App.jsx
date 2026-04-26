@@ -66,22 +66,30 @@ function App() {
     setExerciseResults([]);
   }, [selectedFood]);
 
+  useEffect(() => {
+    if (!selectedFood) return;
+    fetchExercises(exerciseQuery);
+  }, [selectedFood]);
+
   const filteredFoods = foods.filter(
     (food) => selectedFood?.name !== food.name,
   );
 
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 flex flex-col items-center px-4 md:px-8">
-        <div className="flex flex-col items-center w-full max-w-md p-4 ">
-          {/*Header*/}
-          <h1 className="text-4xl font-extrabold mb-8 text-center text-slate-300 tracking-tight leading-tight">
-            <span className="text-red-400">Calories</span> to{" "}
-            <span className="text-red-400">Exercise</span>
+    <div className="min-h-screen bg-[linear-gradient(180deg,_#111827_0%,_#0f172a_42%,_#020617_100%)] px-4 py-10 text-stone-100 md:px-8 md:py-14">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10">
+        <section className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+          <h1 className="max-w-4xl text-5xl font-semibold leading-none tracking-tight text-white md:text-7xl">
+            Calories to Exercise
           </h1>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
+            Search a food, pick a serving size, and see how long it would take
+            to work it off with real activities.
+          </p>
+        </section>
 
-          {/* Search bar and button */}
-          <form className="flex w-full mb-4" onSubmit={handleSearch}>
+        <section className="mx-auto w-full max-w-3xl rounded-[28px] border border-white/10 bg-white/6 p-5 shadow-2xl shadow-slate-950/40 backdrop-blur md:p-6">
+          <form className="flex w-full flex-col gap-3 sm:flex-row" onSubmit={handleSearch}>
             <FoodSearch
               value={search}
               onChange={(value) => {
@@ -95,13 +103,12 @@ function App() {
             <button
               type="submit"
               disabled={loading}
-              className="ml-2 px-5 py-3 rounded-lg font-medium bg-slate-600 text-slate-100 hover:bg-slate-500 active:bg-slate-700 disabled:bg-slate-700/50 disabled:cursor-not-allowed transition"
+              className="rounded-2xl bg-amber-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-amber-300 active:bg-amber-500 disabled:cursor-not-allowed disabled:bg-amber-200/60"
             >
               {loading ? "Searching..." : "Search"}
             </button>
           </form>
 
-          {/*Dropdown*/}
           <FoodDropdown
             search={search}
             selectedFood={selectedFood}
@@ -111,45 +118,66 @@ function App() {
               setSearch(food.name);
             }}
           />
-          {hasSearched && !loading && search && filteredFoods.length === 0 && (
-            <div className="mt-3 text-slate-300 text-base font-medium">
+          {hasSearched &&
+            !loading &&
+            !selectedFood &&
+            search &&
+            filteredFoods.length === 0 && (
+            <div className="mt-4 rounded-2xl border border-white/10 bg-slate-900/50 px-4 py-3 text-sm font-medium text-slate-300">
               No foods found
             </div>
           )}
-        </div>
+        </section>
 
-        {/*Selected Food Card*/}
-        {selectedFood && !isEditingSearch && <FoodCard food={selectedFood} />}
+        {selectedFood && !isEditingSearch ? (
+          <>
+            <section className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
+              <FoodCard food={selectedFood} />
+              <div className="flex flex-col gap-4 rounded-[28px] border border-white/10 bg-white/6 p-5 shadow-2xl shadow-slate-950/35 backdrop-blur md:p-6">
+                <WeightInput value={weight} onChange={setWeight} />
+                <ExerciseSearch
+                  value={exerciseQuery}
+                  onChange={setExerciseQuery}
+                  onSubmit={handleExerciseSearch}
+                  loading={exerciseLoading}
+                />
+              </div>
+            </section>
 
-        {/* Weight Entry */}
-        {selectedFood && !isEditingSearch && (
-          <WeightInput value={weight} onChange={setWeight} />
-        )}
+            <section className="space-y-4">
+              <div className="flex flex-col gap-1">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-200/80">
+                  Exercise Equivalent
+                </p>
+                <h2 className="text-2xl font-semibold text-white">
+                  Time to burn off your selection
+                </h2>
+              </div>
 
-        {/* Exercise search bar and submission */}
-        {selectedFood && !isEditingSearch && (
-          <ExerciseSearch
-            value={exerciseQuery}
-            onChange={setExerciseQuery}
-            onSubmit={handleExerciseSearch}
-            loading={exerciseLoading}
-          />
-        )}
-
-        {/* Exercise cards */}
-        {selectedFood && !isEditingSearch && exerciseResults.length > 0 && (
-          <div className="mt-6 mx-auto grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))] max-w-5xl">
-            {exerciseResults.map((ex, idx) => (
-              <ExerciseCard
-                key={idx}
-                exercise={ex}
-                totalCalories={totalCalories}
-              />
-            ))}
-          </div>
+              {exerciseResults.length > 0 ? (
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {exerciseResults.map((ex, idx) => (
+                    <ExerciseCard
+                      key={idx}
+                      exercise={ex}
+                      totalCalories={totalCalories}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-[24px] border border-dashed border-white/14 bg-slate-950/35 px-6 py-10 text-center text-slate-300">
+                  Search for an activity to compare this meal against.
+                </div>
+              )}
+            </section>
+          </>
+        ) : (
+          <section className="rounded-[28px] border border-white/8 bg-slate-950/25 px-6 py-10 text-center text-slate-300">
+            Pick a food result to see serving details and exercise comparisons.
+          </section>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

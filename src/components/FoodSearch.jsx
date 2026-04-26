@@ -6,12 +6,11 @@ export const FoodSearch = ({ value, onChange }) => {
       onChange={(e) => onChange(e.target.value)}
       placeholder="Search for a food..."
       className="
-  w-full p-3 rounded-lg
-  bg-slate-400 text-black placeholder-slate-400
-  border border-slate-700
-  focus:outline-none focus:ring-2 focus:ring-red-400/60 focus:border-red-400
-  transition
-"
+        w-full rounded-2xl border border-white/10 bg-slate-950/55 px-4 py-3
+        text-base text-white placeholder:text-slate-500
+        outline-none transition focus:border-amber-300/70
+        focus:ring-2 focus:ring-amber-300/25
+      "
     />
   );
 };

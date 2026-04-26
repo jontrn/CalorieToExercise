@@ -9,19 +9,24 @@ export const ExerciseCard = ({ exercise, totalCalories }) => {
   return (
     <div
       className="
-      bg-slate-400 rounded-lg shadow-md
-      p-8 flex flex-col items-center justify-center
-      transition-all duration-200 ease-out
-      hover:-translate-y-1 hover:shadow-lg
+      rounded-[24px] border border-white/10 bg-white/6 p-6
+      flex min-h-[190px] flex-col justify-between
+      shadow-xl shadow-slate-950/30 transition-all duration-200 ease-out
+      hover:-translate-y-1 hover:border-amber-300/30
     "
     >
-      <h3 className="font-bold text-lg text-center text-slate-900 mb-2">
-        {exercise.name}
-      </h3>
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+          Activity
+        </p>
+        <h3 className="mt-2 text-xl font-semibold text-white">
+          {exercise.name}
+        </h3>
+      </div>
 
       {totalCalories > 0 && (
-        <>
-          <p className="text-slate-900 mt-2 text-2xl font-extrabold">
+        <div className="mt-6">
+          <p className="text-4xl font-semibold tracking-tight text-amber-200">
             {minutes >= 60
               ? `${Math.floor(minutes / 60)} hr${
                   Math.floor(minutes / 60) > 1 ? "s" : ""
@@ -29,10 +34,10 @@ export const ExerciseCard = ({ exercise, totalCalories }) => {
               : `${minutes} min`}
           </p>
 
-          <p className="text-sm text-slate-800 mt-1 font-medium">
+          <p className="mt-2 text-sm font-medium text-slate-300">
             ~{exercise.calories_per_hour} cal/hr
           </p>
-        </>
+        </div>
       )}
     </div>
   );

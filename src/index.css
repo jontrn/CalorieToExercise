@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family:
+    "Segoe UI", "Helvetica Neue", ui-sans-serif, sans-serif;
+  background: #020617;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  font-family:
+    Georgia, "Times New Roman", ui-serif, serif;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;

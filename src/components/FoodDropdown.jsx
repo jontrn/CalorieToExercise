@@ -7,11 +7,11 @@ export const FoodDropdown = ({
   if (!search || selectedFood || filteredFoods.length === 0) return null;
 
   return (
-    <div className="w-full mt-2 rounded-lg bg-slate-300 shadow-lg max-h-60 overflow-y-auto ring-1 ring-black/20">
+    <div className="mt-3 max-h-72 w-full overflow-y-auto rounded-[22px] border border-white/10 bg-slate-950/90 p-2 shadow-2xl shadow-slate-950/40">
       {filteredFoods.map((food, key) => (
         <div
           key={key}
-          className="dropdown-item p-3 hover:bg-blue-100 cursor-pointer"
+          className="cursor-pointer rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-white/8"
           onClick={() => onSelectFood(food)}
         >
           {food.name}

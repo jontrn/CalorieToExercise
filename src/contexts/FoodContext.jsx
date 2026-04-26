@@ -22,7 +22,6 @@ export const FoodProvider = ({ children }) => {
       return;
     }
 
-    // Prefer 100g if it exists
     const hundredGramMeasure =
       food.foodMeasures.find(
         (m) =>
@@ -55,8 +54,6 @@ export const FoodProvider = ({ children }) => {
         totalCalories,
         selectedMeasure,
         caloriesPerServing,
-
-        // actions
         selectFood,
         changeMeasure,
         setServings,
