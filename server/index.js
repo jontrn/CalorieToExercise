@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import path from "path";
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
@@ -17,6 +16,10 @@ const USDA_API_KEY = process.env.USDA_API_KEY;
 const API_NINJAS_KEY = process.env.API_NINJAS_KEY;
 
 let isFetching = false;
+
+app.get("/health", (_req, res) => {
+  res.json({ ok: true });
+});
 
 app.get("/foods", async (req, res) => {
   const { query } = req.query;

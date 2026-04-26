@@ -4,7 +4,7 @@ import { FoodSearch } from "./components/FoodSearch";
 import { FoodDropdown } from "./components/FoodDropdown";
 import { ExerciseCard } from "./components/ExerciseCard";
 import { useFood } from "./contexts/FoodContext";
-import { searchFoods } from "./api/usdafdc";
+import { pingBackend, searchFoods } from "./api/usdafdc";
 import { ExerciseSearch } from "./components/ExerciseSearch";
 import { WeightInput } from "./components/WeightInput";
 
@@ -16,6 +16,8 @@ function App() {
   const [exerciseLoading, setExerciseLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [weight, setWeight] = useState(160);
+  const [backendReady, setBackendReady] = useState(false);
+  const [backendWaking, setBackendWaking] = useState(false);
 
   const { selectedFood, totalCalories, selectFood, clearFood } = useFood();
 
@@ -23,17 +25,53 @@ function App() {
 
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const warmBackend = async () => {
+      try {
+        await pingBackend();
+        if (!cancelled) {
+          setBackendReady(true);
+          setBackendWaking(false);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setBackendReady(false);
+        }
+      }
+    };
+
+    warmBackend();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!search) return setFoods([]);
     setHasSearched(true);
     setLoading(true);
+    setBackendWaking(false);
+
+    let wakeTimer;
+    if (!backendReady) {
+      wakeTimer = setTimeout(() => {
+        setBackendWaking(true);
+      }, 1200);
+    }
+
     try {
       const results = await searchFoods(search);
       setFoods(Array.isArray(results) ? results : []);
+      setBackendReady(true);
     } catch (err) {
       setFoods([]);
     } finally {
+      clearTimeout(wakeTimer);
+      setBackendWaking(false);
       setLoading(false);
     }
   };
@@ -108,6 +146,12 @@ function App() {
               {loading ? "Searching..." : "Search"}
             </button>
           </form>
+
+          {backendWaking && (
+            <div className="mt-4 rounded-2xl border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm font-medium text-amber-100">
+              Waking up the server. The first search can take a little longer.
+            </div>
+          )}
 
           <FoodDropdown
             search={search}
