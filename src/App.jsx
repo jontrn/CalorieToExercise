@@ -190,7 +190,7 @@ function App() {
 
             <section className="space-y-4">
               <div className="flex flex-col gap-1">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-200/80">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/80">
                   Exercise Equivalent
                 </p>
                 <h2 className="text-2xl font-semibold text-white">
@@ -215,11 +215,7 @@ function App() {
               )}
             </section>
           </>
-        ) : (
-          <section className="rounded-[28px] border border-white/8 bg-slate-950/25 px-6 py-10 text-center text-slate-300">
-            Pick a food result to see serving details and exercise comparisons.
-          </section>
-        )}
+        ) : null}
       </div>
     </div>
   );

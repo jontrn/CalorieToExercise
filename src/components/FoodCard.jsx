@@ -12,7 +12,7 @@ export const FoodCard = ({ food }) => {
 
   return (
     <div className="rounded-[28px] border border-white/10 bg-white/6 p-6 shadow-2xl shadow-slate-950/35 backdrop-blur transition-all duration-200 ease-out md:p-7">
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-200/80">
+      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/80">
         Selected Food
       </p>
       <div className="mt-3 flex items-start justify-between gap-4">
