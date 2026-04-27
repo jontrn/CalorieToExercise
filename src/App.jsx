@@ -193,9 +193,6 @@ function App() {
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/80">
                   Exercise Equivalent
                 </p>
-                <h2 className="text-2xl font-semibold text-white">
-                  Time to burn off your selection
-                </h2>
               </div>
 
               {exerciseResults.length > 0 ? (
